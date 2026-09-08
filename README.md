@@ -10,7 +10,6 @@ A modern, responsive, full-stack web application for profiling, managing, and an
 ## 🌟 Key Features
 
 - **🎨 Modern Glassmorphic Design & Palette**: Inspired by the official federation logo featuring Royal Purple, Gold, and Orchid accents with smooth dark/light mode toggle.
-- **🏛️ Barangay Association Header Management**: Manage municipality, barangay name, association title, president/leader, contact info, and DOLE registration #.
 - **🎴 Dual Interactive View Modes**:
   - **Cards Grid View**: Elevated 3D cards with micro-animations, position badges (Leader, Officer, Member), civil status pills, and hover quick-action overlays.
   - **Data Table View**: Replicates the official Excel spreadsheet template columns (`No.`, `Name of Woman`, `Age`, `Civil Status`, `Occupation`, `Position`, `Contact Number`, `Remarks`, `Actions`).

@@ -449,32 +449,34 @@ require_once __DIR__ . '/version.php';
     <div class="modal-overlay" id="importModal">
         <div class="modal-card">
             <div class="modal-header">
-                <h3><i class="fa-solid fa-database"></i> Data Backup, Import & Export</h3>
+                <h3><i class="fa-solid fa-database"></i> Data Management</h3>
                 <button class="close-modal-btn" id="closeImportModal"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
                 <div style="display: flex; flex-direction: column; gap: 18px;">
                     <div style="background: var(--bg-input); padding: 16px; border-radius: var(--radius-md);">
-                        <h4 style="font-size: 0.95rem; margin-bottom: 8px;"><i class="fa-solid fa-file-csv" style="color: #10b981;"></i> Export Profile Records</h4>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Download current women profiling dataset to CSV (Excel compatible) or JSON format.</p>
+                        <h4 style="font-size: 0.95rem; margin-bottom: 8px;"><i class="fa-solid fa-file-csv" style="color: #10b981;"></i> Backup and Restore Records</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Download current dataset to CSV (Excel) or JSON format.</p>
                         <div style="display: flex; gap: 10px;">
-                            <button class="btn btn-secondary" id="exportCsvBtn"><i class="fa-solid fa-download"></i> Export to CSV</button>
-                            <button class="btn btn-secondary superadmin-only" id="exportJsonBtn" style="display: none;"><i class="fa-solid fa-code"></i> Export to JSON</button>
-                        </div>
+                            <button class="btn btn-secondary" id="exportCsvBtn" style="width:33%"><i class="fa-solid fa-download"></i> Export CSV</button>
+                            <button class="btn btn-secondary superadmin-only" id="exportJsonBtn" style="width:33%;display: none;"><i class="fa-solid fa-code"></i> Export JSON</button>
+							<input type="file" id="importFileInput" accept=".json" style="display:none" onchange="document.getElementById('fileBtn').value = this.files.length ? this.files[0].name : 'Select';">
+							<button class="btn btn-secondary superadmin-only" id="fileBtn" onclick="document.getElementById('importFileInput').click();" style="width:33%;display: none;"><i class="fa-solid fa-upload"></i> Restore JSON</button>
+						</div>
                     </div>
 
                     <div class="superadmin-only" style="background: rgba(124, 58, 237, 0.12); border: 1px solid rgba(124, 58, 237, 0.4); padding: 16px; border-radius: var(--radius-md); display: none;">
-                        <h4 style="font-size: 0.95rem; color: #c4b5fd; margin-bottom: 8px;"><i class="fa-solid fa-arrows-rotate" style="color: var(--gold-400);"></i> Sync Localhost <-> Production Server</h4>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Push your local dataset directly to your live production server API endpoint.</p>
+                        <h4 style="font-size: 0.95rem; color: #c4b5fd; margin-bottom: 8px;"><i class="fa-solid fa-arrows-rotate" style="color: var(--gold-400);"></i> Sync Localhost <-> Remote Server</h4>
+                        <!--<p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Push your local dataset directly to your live server API endpoint.</p>-->
                         <div class="form-group" style="margin-bottom: 10px;">
                             <label class="form-label" for="syncTargetUrl">Production API Endpoint URL</label>
                             <input type="url" id="syncTargetUrl" class="form-input" value="https://mcjim-server.com/projects/zds-kalipi/api.php">
                         </div>
                         <div class="form-group" style="margin-bottom: 12px;">
                             <label class="form-label" for="syncSecretToken">Sync Secret Token</label>
-                            <div style="display: flex; gap: 8px;">
-                                <input type="text" id="syncSecretToken" class="form-input" value="ZDS_KALIPI_SECRET_TOKEN_2026" placeholder="Enter your custom secret token...">
-                                <button type="button" class="btn btn-secondary" id="genSyncTokenBtn" title="Generate Random Secure Token" style="padding: 8px 12px; font-size: 0.8rem; flex-shrink: 0; white-space: nowrap;">
+                            <div style="display: flex; gap: 10px;">
+                                <input type="text" id="syncSecretToken" class="form-input" value="ZDS_KALIPI_SECRET_TOKEN_2026" placeholder="Enter your custom secret token..." style="width:50%">
+                                <button type="button" class="btn btn-secondary" id="genSyncTokenBtn" title="Generate Random Secure Token" style="padding: 8px 12px; font-size: 0.8rem;width:50%">
                                     <i class="fa-solid fa-key" style="color: var(--gold-400);"></i> Generate Token
                                 </button>
                             </div>
@@ -484,12 +486,6 @@ require_once __DIR__ . '/version.php';
                             <button class="btn btn-secondary" id="pullSyncBtn" style="flex: 1; border-color: var(--gold-400); color: var(--gold-400);"><i class="fa-solid fa-cloud-arrow-down"></i> Pull from Production</button>
                         </div>
                     </div>
-                    <div class="superadmin-only" style="background: var(--bg-input); padding: 16px; border-radius: var(--radius-md); display: none;">
-                        <h4 style="font-size: 0.95rem; margin-bottom: 8px;"><i class="fa-solid fa-upload" style="color: #3b82f6;"></i> Import JSON Dataset</h4>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Restore dataset from a previously exported JSON backup file.</p>
-                        <input type="file" id="importFileInput" accept=".json" style="margin-bottom: 10px; color: var(--text-main);">
-                    </div>
-
                     <div class="superadmin-only" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); padding: 16px; border-radius: var(--radius-md); display: none;">
                         <h4 style="font-size: 0.95rem; color: #ef4444; margin-bottom: 8px;"><i class="fa-solid fa-triangle-exclamation"></i> Reset System Data</h4>
                         <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Reset all records to initial Zamboanga del Sur KALIPI sample dataset.</p>
