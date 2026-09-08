@@ -82,4 +82,5 @@ SOURCE schema.sql;
 ---
 
 ## 📜 License & Accreditation
-Developed for **Zamboanga del Sur KALIPI-RIC Women Federation, Inc.** &bull; CY 2026 Official Profiling Standard.
+Developed for **Zamboanga del Sur KALIPI-RIC Women Federation, Inc.** &bull; CY 2026.
+For inquires: https://mcjim-server.com
