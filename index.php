@@ -13,6 +13,7 @@ require_once __DIR__ . '/version.php';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Stylesheet with Cache Busting -->
     <link rel="stylesheet" href="<?php echo asset_url('css/style.css'); ?>">
+	<link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
 </head>
 <body>
 
@@ -37,7 +38,7 @@ require_once __DIR__ . '/version.php';
                 <button class="btn btn-secondary admin-only" id="importModalBtn" title="Import / Export Data" style="display: none;">
                     <i class="fa-solid fa-file-import"></i> <span>Data Tools</span>
                 </button>
-                <button class="btn btn-gold" id="printReportBtn" title="Print Official Excel Profiling Report">
+				<button class="btn btn-gold" id="printReportBtn" title="Print Official Excel Profiling Report">
                     <i class="fa-solid fa-print"></i> <span>Print Form</span>
                 </button>
                 <button class="btn btn-primary admin-only" id="addMemberBtn" style="display: none;">
@@ -227,10 +228,10 @@ require_once __DIR__ . '/version.php';
 
     </div>
 
-    <!-- Sticky Footer -->
+    <!-- Sticky Footer
     <footer style="position: sticky; bottom: 0; width: 100%; background: var(--bg-card); border-top: 1px solid var(--border-color); padding: 10px 24px; text-align: center; z-index: 100; font-size: 0.8rem; color: var(--text-muted); box-shadow: 0 -2px 10px rgba(0,0,0,0.1);">
         &copy; 2026 Zamboanga del Sur KALIPI-RIC Federation. All Rights Reserved.
-    </footer>
+    </footer> -->
 
     <!-- MODAL 0: Admin Login Modal -->
     <div class="modal-overlay" id="loginModal">
