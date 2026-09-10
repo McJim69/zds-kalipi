@@ -686,10 +686,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (theme === 'dark') {
             themeIcon.className = 'fa-solid fa-moon';
-            themeText.textContent = 'Dark Mode';
+            themeText.textContent = 'Light';
         } else {
             themeIcon.className = 'fa-solid fa-sun';
-            themeText.textContent = 'Light Mode';
+            themeText.textContent = 'Dark';
         }
     }
 

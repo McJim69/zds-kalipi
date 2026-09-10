@@ -1,8 +1,6 @@
 # ZDS KALIPI-RIC Women Federation, Inc.
 ## Women's Profiling System — CY 2026
 
-![ZDS KALIPI Logo](images/logo.png)
-
 A modern, responsive, full-stack web application for profiling, managing, and analyzing member records of the **Zamboanga del Sur KALIPI-RIC Women Federation, Inc.** Built according to official government profiling form standards (CY 2026).
 
 ---

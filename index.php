@@ -36,13 +36,13 @@ require_once __DIR__ . '/version.php';
                     <i class="fa-solid fa-users-gear"></i> <span>Users</span>
                 </button>
                 <button class="btn btn-secondary admin-only" id="importModalBtn" title="Import / Export Data" style="display: none;">
-                    <i class="fa-solid fa-file-import"></i> <span>Data Tools</span>
+                    <i class="fa-solid fa-file-import"></i> <span>Tools</span>
                 </button>
 				<button class="btn btn-gold" id="printReportBtn" title="Print Official Excel Profiling Report">
-                    <i class="fa-solid fa-print"></i> <span>Print Form</span>
+                    <i class="fa-solid fa-print"></i> <span>Print</span>
                 </button>
                 <button class="btn btn-primary admin-only" id="addMemberBtn" style="display: none;">
-                    <i class="fa-solid fa-user-plus"></i> <span>Add Profile</span>
+                    <i class="fa-solid fa-user-plus"></i> <span>Add</span>
                 </button>
                 <button class="btn btn-secondary" id="authBtn" title="Admin Login">
                     <i class="fa-solid fa-lock" id="authIcon"></i> <span id="authText">Admin Login</span>
