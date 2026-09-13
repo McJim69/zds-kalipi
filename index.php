@@ -30,7 +30,7 @@ require_once __DIR__ . '/version.php';
             </div>
             <div class="nav-actions">
                 <button class="btn btn-secondary" id="themeToggleBtn" title="Toggle Light / Dark Mode">
-                    <i class="fa-solid fa-moon" id="themeIcon"></i> <span id="themeText">Dark</span>
+                    <i class="fa-solid fa-moon" id="themeIcon"></i> <span id="themeText"></span>
                 </button>
                 <button class="btn btn-secondary superadmin-only" id="userManagementBtn" title="User Management" style="display: none;">
                     <i class="fa-solid fa-users-gear"></i> <span>Users</span>
@@ -78,7 +78,7 @@ require_once __DIR__ . '/version.php';
                     <span class="info-value" id="dispBarangay">San Jose</span>
                 </div>
                 <div class="info-item">
-                    <span class="info-label"><i class="fa-solid fa-user-tie"></i> President / Leader</span>
+                    <span class="info-label"><i class="fa-solid fa-user-tie"></i> President</span>
                     <span class="info-value" id="dispPresident">Ma. Elena S. Santos</span>
                 </div>
                 <div class="info-item">

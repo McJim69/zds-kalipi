@@ -732,10 +732,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (theme === 'dark') {
             themeIcon.className = 'fa-solid fa-moon';
-            themeText.textContent = 'Light';
+            themeText.textContent = '';
         } else {
             themeIcon.className = 'fa-solid fa-sun';
-            themeText.textContent = 'Dark';
+            themeText.textContent = '';
         }
     }
 
