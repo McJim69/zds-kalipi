@@ -897,10 +897,10 @@ body {
     grid-column: span 2;
 }
 
-.form-label {
+label, .form-label {
     font-size: 0.82rem;
     font-weight: 700;
-    color: var(--text-main);
+    color: #bbb;
 }
 
 .form-input, .form-select, .form-textarea {

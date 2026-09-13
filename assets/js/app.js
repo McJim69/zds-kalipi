@@ -94,6 +94,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const genSyncTokenBtn = document.getElementById('genSyncTokenBtn');
     const syncSecretToken = document.getElementById('syncSecretToken');
 
+    const assocModal = document.getElementById('assocModal');
+    const closeAssocModal = document.getElementById('closeAssocModal');
+    const cancelAssocBtn = document.getElementById('cancelAssocBtn');
+    const assocForm = document.getElementById('assocForm');
+    const assocSettingsBtn = document.getElementById('assocSettingsBtn');
+
     let currentDetailMemberId = null;
 
     // --- Helper Functions ---
@@ -420,7 +426,37 @@ document.addEventListener('DOMContentLoaded', () => {
     closeImportModal.addEventListener('click', () => closeModal(importModal));
     closeImportModalBtn.addEventListener('click', () => closeModal(importModal));
 
+    assocSettingsBtn.addEventListener('click', async () => {
+        await populateMunicipalitySelect(document.getElementById('assocMunicipality'), associationInfo.municipality);
+        await populateBarangaySelect(document.getElementById('assocBarangay'), associationInfo.municipality, associationInfo.barangay);
+        document.getElementById('assocNameInput').value = associationInfo.associationName || '';
+        document.getElementById('assocPresidentInput').value = associationInfo.presidentLeader || '';
+        document.getElementById('assocContactInput').value = associationInfo.contactNo || '';
+        document.getElementById('assocDoleInput').value = associationInfo.doleRegNo || '';
+        openModal(assocModal);
+    });
+
+    document.getElementById('assocMunicipality').addEventListener('change', async (e) => {
+        await populateBarangaySelect(document.getElementById('assocBarangay'), e.target.value);
+    });
+    closeAssocModal.addEventListener('click', () => closeModal(assocModal));
+    cancelAssocBtn.addEventListener('click', () => closeModal(assocModal));
+    assocForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        associationInfo.municipality = document.getElementById('assocMunicipality').value;
+        associationInfo.barangay = document.getElementById('assocBarangay').value;
+        associationInfo.associationName = document.getElementById('assocNameInput').value;
+        associationInfo.presidentLeader = document.getElementById('assocPresidentInput').value;
+        associationInfo.contactNo = document.getElementById('assocContactInput').value;
+        associationInfo.doleRegNo = document.getElementById('assocDoleInput').value;
+        saveAssociationInfoLocal();
+        updateAssociationBanner();
+        closeModal(assocModal);
+        showToast('Association Info updated successfully.', 'success');
+    });
+
     memberForm.addEventListener('submit', handleMemberFormSubmit);
+
 
     exportCsvBtn.addEventListener('click', exportToCSV);
     exportJsonBtn.addEventListener('click', exportToJSON);
@@ -557,21 +593,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const bFilter = document.getElementById('barangayFilter');
         
         let resetMunicipality = 'ALL';
-        if (isAdmin && userRole === 'admin' && userMunicipality && userMunicipality !== 'ALL') {
+        let isRestricted = (isAdmin && userRole === 'admin' && userMunicipality && userMunicipality !== 'ALL');
+        if (isRestricted) {
             resetMunicipality = userMunicipality;
         }
 
         if (mFilter) {
-            mFilter.disabled = (resetMunicipality !== 'ALL');
+            mFilter.disabled = isRestricted;
             await populateMunicipalitySelect(mFilter, resetMunicipality);
-            if (mFilter.options.length > 0 && mFilter.options[0]) {
+            
+            // Only add "All Municipalities" override if they are not restricted
+            if (!isRestricted && mFilter.options.length > 0 && mFilter.options[0]) {
                 mFilter.options[0].text = "All Municipalities";
                 mFilter.options[0].value = "ALL";
             }
         }
         
         if (bFilter) {
-            if (resetMunicipality !== 'ALL') {
+            if (isRestricted) {
                 await populateBarangaySelect(bFilter, resetMunicipality);
             } else {
                 bFilter.innerHTML = '<option value="ALL">All Barangays</option>';
@@ -644,9 +683,16 @@ document.addEventListener('DOMContentLoaded', () => {
     async function populateMunicipalitySelect(selectElem, selectedValue = '') {
         try {
             const res = await fetch('get_options.php?type=municipality');
-            const data = await res.json();
-            let html = '<option value="">Select Municipality</option>';
+            let data = await res.json();
+            let isRestricted = (isAdmin && userRole === 'admin' && userMunicipality && userMunicipality !== 'ALL');
+            let html = isRestricted ? '' : '<option value="">Select Municipality</option>';
+            
             if (Array.isArray(data)) {
+                // Restrict options if Municipal User
+                if (isRestricted) {
+                    data = data.filter(m => m === userMunicipality);
+                }
+                
                 data.forEach(m => {
                     const sel = (m === selectedValue) ? 'selected' : '';
                     html += `<option value="${m}" ${sel}>${m}</option>`;
@@ -724,35 +770,53 @@ document.addEventListener('DOMContentLoaded', () => {
         let contactNo = "N/A";
         let doleReg = "N/A";
 
-        if (filters.municipality !== 'ALL') {
+        // Determine context
+        let isMainAssociation = false;
+        
+        if (filters.municipality === 'ALL') {
+            assocName = "ZDS KALIPI-RIC Women Federation";
+            isMainAssociation = (associationInfo.municipality === "Pagadian City" && associationInfo.barangay === "San Jose");
+        } else if (filters.municipality !== 'ALL') {
             if (filters.barangay !== 'ALL') {
-                assocName = `${filters.barangay}, ${filters.municipality} KALIPI Women's Association`;
-                
-                // Find president in profiles
-                const presidentProfile = profiles.find(p => 
-                    p.municipality === filters.municipality && 
-                    p.barangay === filters.barangay && 
-                    p.position === 'President'
-                );
-                
-                if (presidentProfile) {
-                    presidentName = presidentProfile.name;
-                    contactNo = presidentProfile.contactNo || "N/A";
+                if (filters.municipality === associationInfo.municipality && filters.barangay === associationInfo.barangay) {
+                    isMainAssociation = true;
+                    assocName = `${filters.barangay}, ${filters.municipality} ${associationInfo.associationName || "KALIPI Women's Association"}`;
+                } else {
+                    assocName = `${filters.barangay}, ${filters.municipality} KALIPI Women's Association`;
+                    // Find president in profiles
+                    const presidentProfile = profiles.find(p => 
+                        p.municipality === filters.municipality && 
+                        p.barangay === filters.barangay && 
+                        p.position === 'President'
+                    );
+                    if (presidentProfile) {
+                        presidentName = presidentProfile.name;
+                        contactNo = presidentProfile.contactNo || "N/A";
+                    }
                 }
             } else {
-                assocName = `${filters.municipality} KALIPI-RIC Federation`;
-                
+                assocName = `${filters.municipality} KALIPI-RIC Women Federation`;
                 // Try to find a municipal-level president
                 const municipalPresident = profiles.find(p => 
                     p.municipality === filters.municipality && 
                     p.position === 'President'
                 );
-                
                 if (municipalPresident) {
                     presidentName = municipalPresident.name;
                     contactNo = municipalPresident.contactNo || "N/A";
                 }
             }
+        }
+
+        // If viewing 'ALL' or the specific main association, prioritize the saved associationInfo for other fields
+        if (filters.municipality === 'ALL' || isMainAssociation) {
+            if (isMainAssociation) {
+                // For exact match, use the name exactly if provided, or fallback to the formatted string
+                assocName = associationInfo.associationName ? `${filters.barangay}, ${filters.municipality} ${associationInfo.associationName}` : assocName;
+            }
+            presidentName = associationInfo.presidentLeader || presidentName;
+            contactNo = associationInfo.contactNo || contactNo;
+            doleReg = associationInfo.doleRegNo || doleReg;
         }
 
         document.getElementById('dispAssociationName').textContent = assocName;
@@ -1344,8 +1408,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const newUserMunicipality = document.getElementById('newUserMunicipality');
 
     if (userManagementBtn) {
-        userManagementBtn.addEventListener('click', () => {
-            populateMunicipalitySelect(newUserMunicipality, 'ALL');
+        userManagementBtn.addEventListener('click', async () => {
+            await populateMunicipalitySelect(newUserMunicipality, 'ALL');
+            if (newUserMunicipality.options.length > 0 && newUserMunicipality.options[0]) {
+                newUserMunicipality.options[0].text = "ALL (Super Admin)";
+                newUserMunicipality.options[0].value = "ALL";
+            }
             loadUsers();
             openModal(userManagementModal);
         });

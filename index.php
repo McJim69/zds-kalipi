@@ -10,9 +10,9 @@ require_once __DIR__ . '/version.php';
     <!-- Meta Descriptions for SEO -->
     <meta name="description" content="Official Barangay Women's Profiling System CY 2026 for Zamboanga del Sur KALIPI-RIC Women Federation, Inc. Management, CRUD, Cards, Table, Analytics, and Printing.">
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="assets/fontawesome/css/all.min.css">
     <!-- Stylesheet with Cache Busting -->
-    <link rel="stylesheet" href="<?php echo asset_url('css/style.css'); ?>">
+    <link rel="stylesheet" href="<?php echo asset_url('assets/css/style.css'); ?>">
 	<link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
 </head>
 <body>
@@ -37,6 +37,9 @@ require_once __DIR__ . '/version.php';
                 </button>
                 <button class="btn btn-secondary admin-only" id="importModalBtn" title="Import / Export Data" style="display: none;">
                     <i class="fa-solid fa-file-import"></i> <span>Tools</span>
+                </button>
+                <button class="btn btn-secondary admin-only" id="assocSettingsBtn" title="Association Info" style="display: none;">
+                    <i class="fa-solid fa-building-flag"></i> <span>Assoc. Info</span>
                 </button>
 				<button class="btn btn-gold" id="printReportBtn" title="Print Official Excel Profiling Report">
                     <i class="fa-solid fa-print"></i> <span>Print</span>
@@ -499,11 +502,53 @@ require_once __DIR__ . '/version.php';
         </div>
     </div>
 
+    <!-- Association Settings Modal -->
+    <div class="modal-overlay" id="assocModal">
+        <div class="modal-card" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-building-flag"></i> Edit Association Info</h3>
+                <button class="close-modal-btn" id="closeAssocModal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="assocForm">
+                    <div class="form-group">
+                        <label>Municipality</label>
+                        <select id="assocMunicipality" class="form-input"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Barangay</label>
+                        <select id="assocBarangay" class="form-input"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Association Name</label>
+                        <input type="text" id="assocNameInput" class="form-input" required placeholder="e.g. KALIPI San Jose Women's Association, Inc.">
+                    </div>
+                    <div class="form-group">
+                        <label>President / Leader</label>
+                        <input type="text" id="assocPresidentInput" class="form-input" required placeholder="e.g. Ma. Elena S. Santos">
+                    </div>
+                    <div class="form-group">
+                        <label>Contact No.</label>
+                        <input type="text" id="assocContactInput" class="form-input" placeholder="e.g. 0917-890-1234">
+                    </div>
+                    <div class="form-group">
+                        <label>DOLE Registration No.</label>
+                        <input type="text" id="assocDoleInput" class="form-input" placeholder="e.g. DOLE-IX-2024-0589-WA">
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelAssocBtn">Cancel</button>
+                <button type="submit" form="assocForm" class="btn btn-primary"><i class="fa-solid fa-save"></i> Save</button>
+            </div>
+                </form>
+        </div>
+    </div>
+
     <!-- Floating Toast Notification -->
     <div class="toast-container" id="toastContainer"></div>
 
     <!-- Scripts with Cache Busting -->
-    <script src="<?php echo asset_url('js/sample-data.js'); ?>"></script>
-    <script src="<?php echo asset_url('js/app.js'); ?>"></script>
+    <script src="<?php echo asset_url('assets/js/sample-data.js'); ?>"></script>
+    <script src="<?php echo asset_url('assets/js/app.js'); ?>"></script>
 </body>
 </html>
